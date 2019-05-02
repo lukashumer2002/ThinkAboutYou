@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "1075928241132",
+    "firebase_url": "https://thinkaboutyou-5a6ba.firebaseio.com",
+    "project_id": "thinkaboutyou-5a6ba",
+    "storage_bucket": "thinkaboutyou-5a6ba.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1075928241132:android:86b7fdd99666b95e",
+        "android_client_info": {
+          "package_name": "com.example.thinkaboutyou"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1075928241132-iv8sqvd6osr360kq68i3715e689lmj42.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.thinkaboutyou",
+            "certificate_hash": "e4f1a2696505aaabda63b6c19c5602ec6dd228ac"
+          }
+        },
+        {
+          "client_id": "1075928241132-a9sfcts2ogr88ttmo42ar6u6vk3e8s8m.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC08_033vCqrq__pfiiTrsfCRBFZMKDm_Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1075928241132-a9sfcts2ogr88ttmo42ar6u6vk3e8s8m.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
