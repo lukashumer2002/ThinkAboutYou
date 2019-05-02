@@ -37,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
     EditText addNewMealName;
     EditText addNewMealKcal;
     List<Meal> listMeals;
+    MealAdapter ad;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,19 +48,32 @@ public class MainActivity extends AppCompatActivity {
         View inflater = View.inflate(MainActivity.this, R.layout.kcaltooloverview, null);
         View viewLogin = View.inflate(MainActivity.this, R.layout.login, null);
         setContentView(R.layout.kcaltooloverview);
-        addNewMealKcal = viewAddnewMeal.findViewById(R.id.addnewmealKcal);
-        addNewMealName = viewAddnewMeal.findViewById(R.id.addnewmealName);
         searchViewKcal = inflater.findViewById(R.id.KcalToolSearchView);
-        floatingActionButtonKcal = inflater.findViewById(R.id.KcalToolFabAdd);
-        listViewKcal = inflater.findViewById(R.id.KcalToolListView);
+        floatingActionButtonKcal = findViewById(R.id.KcalToolFabAdd);
+        listViewKcal = findViewById(R.id.KcalToolListView);
         email = viewLogin.findViewById(R.id.EditTextUsername);
         passwort = viewLogin.findViewById(R.id.EditTextPasswort);
         buttonLogin = viewLogin.findViewById(R.id.LoginButtonSubmit);
+
+        searchViewKcal.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+
+                filter(listMeals, newText);
+                return false;
+            }
+        });
 
         floatingActionButtonKcal.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dialogaddnewMeal(View.inflate(MainActivity.this, R.layout.addnewmeal, null));
+                setAdapter(listMeals);
             }
         });
 
@@ -124,6 +138,8 @@ public class MainActivity extends AppCompatActivity {
             parent.removeView(view);
         }
         dialog = alert.create();
+        addNewMealKcal = view.findViewById(R.id.addnewmealKcal);
+        addNewMealName = view.findViewById(R.id.addnewmealName);
 
         alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
             @Override
@@ -133,6 +149,7 @@ public class MainActivity extends AppCompatActivity {
 
                 Meal meal = new Meal(name, Integer.valueOf(kcal));
                 listMeals.add(meal);
+
                 dialog.dismiss();
             }
         });
@@ -144,5 +161,25 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         alert.show();
+    }
+
+    public void setAdapter(List<Meal> list)
+    {
+        ad = new MealAdapter(this, list);
+        listViewKcal.setAdapter(ad);
+    }
+
+    public List<Meal> filter(List<Meal> list, String txt)
+    {
+        List<Meal> currentList = new ArrayList<>();
+        for (int i = 0; i < list.size(); i++) {
+            if (list.get(i).getMeal().contains(txt))
+            {
+                currentList.add(list.get(i));
+            }
+        }
+        ad = new MealAdapter(this,currentList);
+        listViewKcal.setAdapter(ad);
+        return currentList;
     }
 }

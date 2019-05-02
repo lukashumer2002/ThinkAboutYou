@@ -2,8 +2,8 @@ package com.example.thinkaboutyou;
 
 public class Meal {
 
-    String meal;
-    int kcal;
+    private String meal;
+    private int kcal;
 
     public Meal(String meal, int kcal) {
         this.meal = meal;
