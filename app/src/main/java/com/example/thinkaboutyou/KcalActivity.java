@@ -121,8 +121,8 @@ public class KcalActivity extends AppCompatActivity {
         alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                String name = addNewMealName.getText().toString();
-                String kcal = addNewMealKcal.getText().toString();
+                String name = addNewMealName.getText().toString().trim();
+                String kcal = addNewMealKcal.getText().toString().trim();
 
                 Meal meal = new Meal(name, Integer.valueOf(kcal));
                 listMeals.add(meal);
