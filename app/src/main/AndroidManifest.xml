@@ -10,13 +10,13 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".RunActivity"
-            android:label="@string/title_activity_run"></activity>
+            android:name=".KcalActivity"
+            android:label="@string/title_activity_kcal"></activity>
         <activity
             android:name=".WorkoutActivity"
             android:label="@string/title_activity_workout" />
         <activity
-            android:name=".KcalActivity"
+            android:name=".RunActivity"
             android:label="@string/title_activity_run" />
         <activity android:name=".MainActivity">
             <intent-filter>
