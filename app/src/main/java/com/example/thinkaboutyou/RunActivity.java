@@ -9,7 +9,7 @@ import android.view.MenuItem;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class WorkoutActivity extends AppCompatActivity {
+public class RunActivity extends AppCompatActivity {
     private TextView mTextMessage;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
@@ -19,23 +19,23 @@ public class WorkoutActivity extends AppCompatActivity {
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.action_home:
-                    Toast.makeText(WorkoutActivity.this, "home", Toast.LENGTH_SHORT).show();
-                    Intent intenthome = new Intent(WorkoutActivity.this, MainActivity.class);
+                    Intent intenthome = new Intent(RunActivity.this, MainActivity.class);
                     startActivity(intenthome);
+                    Toast.makeText(RunActivity.this, "home", Toast.LENGTH_SHORT).show();
+
                     break;
                 case R.id.action_kcal:
-                    Intent intentKcal = new Intent(WorkoutActivity.this,KcalActivity.class);
+                    Intent intentKcal = new Intent(RunActivity.this, KcalActivity.class);
                     startActivity(intentKcal);
-                    Toast.makeText(WorkoutActivity.this, "kcalzähler", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(RunActivity.this, "kcalzähler", Toast.LENGTH_SHORT).show();
                     break;
                 case R.id.action_workout:
-
-                    Toast.makeText(WorkoutActivity.this, "workout tool", Toast.LENGTH_SHORT).show();
+                    Intent intentWo = new Intent(RunActivity.this, WorkoutActivity.class);
+                    startActivity(intentWo);
+                    Toast.makeText(RunActivity.this, "workout tool", Toast.LENGTH_SHORT).show();
                     break;
                 case R.id.action_run:
-                    Intent intentRun = new Intent(WorkoutActivity.this, RunActivity.class);
-                    startActivity(intentRun);
-                    Toast.makeText(WorkoutActivity.this, "running tool", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(RunActivity.this, "running tool", Toast.LENGTH_SHORT).show();
                     break;
 
             }
@@ -46,10 +46,10 @@ public class WorkoutActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.login);
-        BottomNavigationView navView = findViewById(R.id.navigationView);
+        setContentView(R.layout.activity_run);
+        BottomNavigationView navView = findViewById(R.id.nav_view);
         mTextMessage = findViewById(R.id.message);
         navView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
     }
-
 }
+

@@ -3,23 +3,30 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/action_recents"
+        android:id="@+id/action_home"
         android:enabled="true"
         android:icon="@drawable/ic_action_home"
-        android:title="Recents"
+        android:title="Home"
         app:showAsAction="ifRoom" />
 
     <item
-        android:id="@+id/action_favorites"
+        android:id="@+id/action_kcal"
         android:enabled="true"
-        android:icon="@drawable/ic_action_home"
-        android:title="Favorites"
+        android:icon="@drawable/ic_action_meal"
+        android:title="Meals"
         app:showAsAction="ifRoom" />
 
     <item
-        android:id="@+id/action_nearby"
+        android:id="@+id/action_workout"
         android:enabled="true"
-        android:icon="@drawable/ic_action_home"
-        android:title="Nearby"
+        android:icon="@drawable/ic_action_workout"
+        android:title="Workout"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/action_run"
+        android:enabled="true"
+        android:icon="@drawable/ic_action_run"
+        android:title="Run"
         app:showAsAction="ifRoom" />
 </menu>
