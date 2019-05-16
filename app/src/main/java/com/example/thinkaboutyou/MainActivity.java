@@ -3,6 +3,8 @@ package com.example.thinkaboutyou;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -24,51 +26,63 @@ public class MainActivity extends AppCompatActivity {
     EditText email;
     EditText passwort;
     Button buttonLogin;
+    private BottomNavigationView navigationView123;
+
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-
+        setContentView(R.layout.activity_main);
         //mAuth = FirebaseAuth.getInstance();
         View viewAddnewMeal = View.inflate(MainActivity.this, R.layout.addnewmeal, null);
         //View inflater = View.inflate(MainActivity.this, R.layout.kcaltooloverview, null);
         View viewLogin = View.inflate(MainActivity.this, R.layout.login, null);
-        setContentView(R.layout.navigation);
+
+
+//        fm.beginTransaction().add(R.id.action_run, fragment3, "3").hide(fragment3).commit();
+//        fm.beginTransaction().add(R.id.action_workout, fragment2, "2").hide(fragment2).commit();
+//        fm.beginTransaction().add(R.id.action_run,fragment1, "1").hide(fragment2).commit();
+//        fm.beginTransaction().add(R.id.action_home,fragment0,"1").commit();
+
         email = viewLogin.findViewById(R.id.EditTextUsername);
         passwort = viewLogin.findViewById(R.id.EditTextPasswort);
+        navigationView123 = findViewById(R.id.bottom_navigation);
         buttonLogin = viewLogin.findViewById(R.id.LoginButtonSubmit);
+        navigationView123.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
 
-        BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation);
-            bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-                @Override
-                public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                    switch (item.getItemId()) {
-                        case R.id.action_home:
-                            Toast.makeText(MainActivity.this, "home", Toast.LENGTH_SHORT).show();
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 
-                            break;
-                        case R.id.action_kcal:
-                            Intent intentKcal = new Intent(MainActivity.this,KcalActivity.class);
-                            startActivity(intentKcal);
-                            Toast.makeText(MainActivity.this, "kcalzähler", Toast.LENGTH_SHORT).show();
-                            break;
-                        case R.id.action_workout:
-                            Intent intentWo = new Intent(MainActivity.this, WorkoutActivity.class);
-                            startActivity(intentWo);
-                            Toast.makeText(MainActivity.this, "workout tool", Toast.LENGTH_SHORT).show();
-                            break;
-                        case R.id.action_run:
-                            Intent intentRun = new Intent(MainActivity.this, RunActivity.class);
-                            startActivity(intentRun);
-                            Toast.makeText(MainActivity.this, "running tool", Toast.LENGTH_SHORT).show();
-                            break;
+                Fragment selectedFra = null;
+                switch (item.getItemId()) {
 
-                    }
-                    return true;
+                    case R.id.action_home:
+                        selectedFra=new HomeFragment();;
+
+                        return true;
+
+                    case R.id.action_kcal:
+                        selectedFra=new KcalActivity();
+
+                        return true;
+
+                    case R.id.action_workout:
+                        selectedFra=new WorkoutActivity();;;
+                        Log.d("LOG", "Workoutactivity:success");
+
+                        return true;
+
+                    case R.id.action_run:
+                        selectedFra=new RunActivity();;
+
+                        return true;
                 }
-            });
+
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_contrainer,selectedFra).commit();
+                return true;
+            }
+        });
 
         buttonLogin.setOnClickListener(new View.OnClickListener() {
             @Override
