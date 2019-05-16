@@ -3,8 +3,10 @@ package com.example.thinkaboutyou;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -12,6 +14,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
+import android.widget.SearchView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -20,6 +25,9 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class MainActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
 
@@ -27,6 +35,23 @@ public class MainActivity extends AppCompatActivity {
     EditText passwort;
     Button buttonLogin;
     private BottomNavigationView navigationView123;
+    private TextView mTextMessage;
+
+    AlertDialog dialog;
+    AlertDialog.Builder alert;
+
+    EditText email1;
+    EditText passwort1;
+    Button buttonLogin1;
+    SearchView searchViewKcal;
+    ListView listViewKcal;
+    FloatingActionButton floatingActionButtonKcal;
+    EditText addNewMealName;
+    EditText addNewMealKcal;
+    List<Meal> listMeals;
+    MealAdapter ad;
+
+
 
 
     @Override
@@ -35,19 +60,23 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         //mAuth = FirebaseAuth.getInstance();
         View viewAddnewMeal = View.inflate(MainActivity.this, R.layout.addnewmeal, null);
-        //View inflater = View.inflate(MainActivity.this, R.layout.kcaltooloverview, null);
+        View inflaterKCAL = View.inflate(MainActivity.this, R.layout.activity_kcal, null);
         View viewLogin = View.inflate(MainActivity.this, R.layout.login, null);
-
-
-//        fm.beginTransaction().add(R.id.action_run, fragment3, "3").hide(fragment3).commit();
-//        fm.beginTransaction().add(R.id.action_workout, fragment2, "2").hide(fragment2).commit();
-//        fm.beginTransaction().add(R.id.action_run,fragment1, "1").hide(fragment2).commit();
-//        fm.beginTransaction().add(R.id.action_home,fragment0,"1").commit();
-
         email = viewLogin.findViewById(R.id.EditTextUsername);
         passwort = viewLogin.findViewById(R.id.EditTextPasswort);
         navigationView123 = findViewById(R.id.bottom_navigation);
         buttonLogin = viewLogin.findViewById(R.id.LoginButtonSubmit);
+
+        //KCALACTIVIZY-------------------
+
+//        mTextMessage = inflaterKCAL.findViewById(R.id.message);
+//        listMeals = new ArrayList<>();
+//        searchViewKcal = inflaterKCAL.findViewById(R.id.KcalToolSearchView);
+//        floatingActionButtonKcal = inflaterKCAL.findViewById(R.id.KcalToolFabAdd);
+//        mTextMessage = inflaterKCAL.findViewById(R.id.message);
+//        listViewKcal = inflaterKCAL.findViewById(R.id.KcalToolListView);
+
+        //--------------------------------
 
         navigationView123.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
 
