@@ -2,8 +2,10 @@ package com.example.thinkaboutyou;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -42,6 +44,7 @@ public class KcalActivity extends Fragment {
     List<Meal> listMeals;
     MealAdapter ad;
 
+    @RequiresApi(api = Build.VERSION_CODES.HONEYCOMB)
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -76,6 +79,7 @@ public class KcalActivity extends Fragment {
                 setAdapter(listMeals);
             }
         });
+
 
         return inflater1;
     }
