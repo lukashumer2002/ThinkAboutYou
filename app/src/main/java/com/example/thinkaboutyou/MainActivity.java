@@ -29,7 +29,6 @@ public class MainActivity extends AppCompatActivity {
     private BottomNavigationView navigationView123;
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
         passwort = viewLogin.findViewById(R.id.EditTextPasswort);
         navigationView123 = findViewById(R.id.bottom_navigation);
         buttonLogin = viewLogin.findViewById(R.id.LoginButtonSubmit);
+
         navigationView123.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
 
             @Override
@@ -58,31 +58,35 @@ public class MainActivity extends AppCompatActivity {
                 switch (item.getItemId()) {
 
                     case R.id.action_home:
-                        selectedFra=new HomeFragment();;
+                        selectedFra = new HomeFragment();
+                        Log.d("LOG", "Homeactivity:success");
 
-                        return true;
+                        break;
 
                     case R.id.action_kcal:
-                        selectedFra=new KcalActivity();
+                        selectedFra = new KcalActivity();
+                        Log.d("LOG", "Kcalactivity:success");
 
-                        return true;
-
+                        break;
                     case R.id.action_workout:
-                        selectedFra=new WorkoutActivity();;;
+                        selectedFra = new WorkoutActivity();
+
+
                         Log.d("LOG", "Workoutactivity:success");
 
-                        return true;
-
+                        break;
                     case R.id.action_run:
-                        selectedFra=new RunActivity();;
+                        selectedFra = new RunActivity();
 
-                        return true;
+                        Log.d("LOG", "RunActivity:success");
+                        break;
                 }
 
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_contrainer,selectedFra).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_contrainer, selectedFra).commit();
                 return true;
             }
         });
+
 
         buttonLogin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -134,7 +138,6 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
     }
-
 
 
 }
