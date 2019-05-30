@@ -14,10 +14,10 @@
         <TableRow
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="7000">
+            android:layout_weight="100000000000000000000">
 
             <ImageView
-                android:id="@+id/imageView"
+                android:id="@+id/imageview"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 tools:srcCompat="@tools:sample/backgrounds/scenic" />
@@ -29,13 +29,56 @@
             android:layout_weight="1">
 
             <TextView
+                android:id="@+id/textview_wdh"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:textSize="40dp"
+                />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+            <TextView
                 android:id="@+id/textview_countdown"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                tools:text="10:00"
-                android:textSize="50dp"
                 android:layout_gravity="center"
-                android:text="TextView" />
+                android:text="TextView"
+                android:textSize="70dp"
+                tools:text="10:00" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+            <TextView
+                android:id="@+id/textview_descritption"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:textSize="50dp" />
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+            <TextView
+                android:id="@+id/textview_descritption_description"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:textSize="40dp" />
         </TableRow>
 
         <TableRow

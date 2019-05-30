@@ -1,14 +1,19 @@
 package com.example.thinkaboutyou;
 
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -22,39 +27,40 @@ public class WorkoutActivity extends Fragment {
     List<Workouts> WOlist;
     ListView WOlistView;
     FloatingActionButton WOfab;
-    TextView countdown;
-    private CountDownTimer countDownTimer;
-    Button play;
-    private long time;
-    private boolean timerunning;
-    TextView pause;
+    AlertDialog dialog;
+    AlertDialog.Builder alert;
+    boolean wodurchführen = false;
+
+
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view= inflater.inflate(R.layout.activity_workout,container,false);
         WOlist = new ArrayList<>();
         WOlistView = view.findViewById(R.id.WOListView);
-        countdown = view.findViewById(R.id.textview_countdown);
-        play = view.findViewById(R.id.buttonplay);
-        pause = view.findViewById(R.id.buttonpause);
-        pause.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                stopTimer();
-            }
-        });
         WOfab = view.findViewById(R.id.WOfloatingActionButton);
-        play.setOnClickListener(new View.OnClickListener() {
+        WOfab.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                startTimer();
+                //add a NEW WO
             }
         });
 
-        WOfab.setOnClickListener(new View.OnClickListener() {
+        WOlistView.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onClick(View v) {
-                //Intent intent = new Intent()
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                Workouts selected = WOlist.get(position);
+                dialogaddWO(View.inflate(getActivity(), R.layout.test, null), selected.getName());
+                if(wodurchführen)
+                {
+
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
             }
         });
         return view;
@@ -66,45 +72,34 @@ public class WorkoutActivity extends Fragment {
 
     }
 
+    public void dialogaddWO(final View view, String txt) {
+        alert = new AlertDialog.Builder(getActivity());
+        alert.setView(view).setCancelable(false);
 
-    public void startTimer()
-    {
-        countDownTimer = new CountDownTimer(time, 1000){
+        ViewGroup parent = (ViewGroup) view.getParent();
+        if (parent != null) {
+            parent.removeView(view);
+        }
+        dialog = alert.create();
+
+        alert.setMessage("Möchtest du wirklich" +txt+" durchführen?");
+
+        alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
             @Override
-            public void onTick(long millisUntilFinished) {
-                time=millisUntilFinished;
-                updateTimer();
+            public void onClick(DialogInterface dialog, int which) {
+             //----------------------------------------------------------------------------------
+            wodurchführen = true;
+             //----------------------------------------------------------------------------------
             }
+        });
 
+        alert.setNegativeButton("Exit", new DialogInterface.OnClickListener() {
             @Override
-            public void onFinish() {
-
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
             }
-        }.start();
-        timerunning=true;
+        });
+        alert.show();
     }
-
-
-    public void updateTimer()
-    {
-        int min = (int) time/60000;
-        int sec = (int) time%60000/1000;
-
-        String abc;
-
-        String timeLeftText = ""+min;
-        timeLeftText+=":";
-        if(sec<10) timeLeftText+="+";
-        timeLeftText+=sec;
-
-        countdown.setText(timeLeftText);
-    }
-
-    public void stopTimer()
-    {
-        countDownTimer.cancel();
-        timerunning = false;
-    }
-
 
 }
