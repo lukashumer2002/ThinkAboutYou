@@ -45,4 +45,9 @@ public class Workouts {
     public void setTime(long time) {
         this.time = time;
     }
+
+    @Override
+    public String toString() {
+        return name+";"+wdh+";"+imagePath+";"+time;
+    }
 }
