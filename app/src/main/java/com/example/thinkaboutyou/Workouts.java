@@ -5,11 +5,13 @@ public class Workouts {
     String name;
     int wdh;
     String imagePath;
+    long time;
 
-    public Workouts(String name, int wdh, String imagePath) {
+    public Workouts(String name, int wdh, String imagePath, long time) {
         this.name = name;
         this.wdh = wdh;
         this.imagePath = imagePath;
+        this.time = time;
     }
 
     public String getName() {
@@ -34,5 +36,13 @@ public class Workouts {
 
     public void setImagePath(String imagePath) {
         this.imagePath = imagePath;
+    }
+
+    public long getTime() {
+        return time;
+    }
+
+    public void setTime(long time) {
+        this.time = time;
     }
 }
