@@ -5,7 +5,6 @@ import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,15 +24,15 @@ public class WOplayer extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view=  inflater.inflate(R.layout.woplayeractivity,container,false);
         timerunning=false;
-        countdown = view.findViewById(R.id.textview_countdown);
-        play = view.findViewById(R.id.buttonplay);
+        countdown = view.findViewById(R.id.RUNtextview_time);
+        play = view.findViewById(R.id.RUNbuttonplay);
         play.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startTimer();
             }
         });
-        pause = view.findViewById(R.id.buttonpause);
+        pause = view.findViewById(R.id.RUNbuttonpause);
         pause.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

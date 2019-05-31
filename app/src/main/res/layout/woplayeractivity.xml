@@ -17,7 +17,7 @@
             android:layout_weight="100000000000000000000">
 
             <ImageView
-                android:id="@+id/imageview"
+                android:id="@+id/RUNimageview"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 tools:srcCompat="@tools:sample/backgrounds/scenic" />
@@ -29,7 +29,7 @@
             android:layout_weight="1">
 
             <TextView
-                android:id="@+id/textview_steps"
+                android:id="@+id/RUNtextview_steps"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -43,7 +43,7 @@
             android:layout_weight="1">
 
             <TextView
-                android:id="@+id/textview_countdown"
+                android:id="@+id/RUNtextview_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -92,7 +92,7 @@
                 android:orientation="horizontal">
 
                 <Button
-                    android:id="@+id/buttonpause"
+                    android:id="@+id/RUNbuttonpause"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
@@ -102,7 +102,7 @@
                     android:padding="10dp" />
 
                 <Button
-                    android:id="@+id/buttonplay"
+                    android:id="@+id/RUNbuttonplay"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
@@ -122,7 +122,7 @@
                     android:text="NEXT" />
 
                 <Button
-                    android:id="@+id/buttonstop"
+                    android:id="@+id/RUNbuttonstop"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"

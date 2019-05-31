@@ -20,8 +20,14 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import java.io.FileOutputStream;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
+
+import static android.content.Context.MODE_APPEND;
+import static android.content.Context.MODE_PRIVATE;
 
 public class WorkoutActivity extends Fragment {
     private TextView mTextMessage;
@@ -202,6 +208,23 @@ public class WorkoutActivity extends Fragment {
         alert2.show();
     }
 
+//    public void writeCsv1(String x)  {
+//
+//        String filename = "Übungen.csv";
+//        try
+//        {
+//            FileOutputStream fos = openFileOutput(filename, MODE_PRIVATE | MODE_APPEND);
+//            PrintWriter out = new PrintWriter(new OutputStreamWriter(fos));
+//            out.println(x);
+//            out.flush();
+//            out.close();
+//
+//
+//        }catch (Exception e)
+//        {
+//            e.printStackTrace();
+//        }
+//    }
 
 
 }
