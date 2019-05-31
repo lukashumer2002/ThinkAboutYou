@@ -35,7 +35,6 @@ public class WorkoutActivity extends Fragment {
 
     AlertDialog dialog2;
     AlertDialog.Builder alert2;
-    boolean wodurchführen = false;
     FragmentManager fragmentManager = getFragmentManager();
     Fragment f1 = new WOplayer();
     boolean selectedFRAGE;
@@ -96,10 +95,8 @@ public class WorkoutActivity extends Fragment {
             public void onClick(DialogInterface dialog, int which) {
              //----------------------------------------------------------------------------------
 
-                fragmentManager.beginTransaction()
-                        .replace(R.id.action_workout
-                                , f1)
-                        .commit();
+               Intent intent = new Intent(getActivity(), WOplayer.class);
+               startActivity(intent);
 
                 //----------------------------------------------------------------------------------
             }
@@ -124,9 +121,23 @@ public class WorkoutActivity extends Fragment {
             parent.removeView(view);
         }
         dialog = alert.create();
-
-        final EditText name = view.findViewById(R.id.textView5);
+        TextView tv = view.findViewById(R.id.textView5);
+        EditText name = view.findViewById(R.id.WOfabeditText);
         ListView lv = view.findViewById(R.id.WOfabListView);
+
+        FloatingActionButton fabWOcreate = view.findViewById(R.id.fabcreatewo);
+
+        fabWOcreate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v)
+            {
+
+                dialog(View.inflate(getActivity(), R.layout.test, null), "Test");
+
+            }
+        });
+
+
         lv.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
