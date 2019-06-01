@@ -19,6 +19,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.FileOutputStream;
 import java.io.OutputStreamWriter;
@@ -96,7 +97,7 @@ public class WorkoutActivity extends Fragment {
 
         alert.setMessage("Möchtest du wirklich" +txt+" durchführen?");
 
-        alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+        alert.setPositiveButton("TRAIN", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
              //----------------------------------------------------------------------------------
@@ -119,6 +120,7 @@ public class WorkoutActivity extends Fragment {
 
     public void dialogcreateWO(View view)
     {
+        final List<Workouts> newList = new ArrayList<>();
         alert = new AlertDialog.Builder(getActivity());
         alert.setView(view).setCancelable(false);
 
@@ -128,7 +130,7 @@ public class WorkoutActivity extends Fragment {
         }
         dialog = alert.create();
         TextView tv = view.findViewById(R.id.textView5);
-        EditText name = view.findViewById(R.id.WOfabeditText);
+        final EditText name = view.findViewById(R.id.WOfabeditText);
         ListView lv = view.findViewById(R.id.WOfabListView);
 
         FloatingActionButton fabWOcreate = view.findViewById(R.id.fabcreatewo);
@@ -137,8 +139,9 @@ public class WorkoutActivity extends Fragment {
             @Override
             public void onClick(View v)
             {
+                View view = View.inflate(getActivity(), R.layout.addnewexercise, null);
+                dialognewexercise(view);
 
-                dialog(View.inflate(getActivity(), R.layout.test, null), "Test");
 
             }
         });
@@ -152,7 +155,8 @@ public class WorkoutActivity extends Fragment {
                 dialog(View.inflate(getActivity(), R.layout.test, null), selected1.getName());
                 if (selectedFRAGE)
                 {
-
+                    newList.add(selected1);
+                    selectedFRAGE=false;
                 }
             }
 
@@ -167,6 +171,9 @@ public class WorkoutActivity extends Fragment {
         alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+
+                GesammtWO gesammtWO = new GesammtWO(name.getText().toString().trim(), newList);
+                KINGlist.add(gesammtWO);
 
             }
         });
@@ -196,6 +203,66 @@ public class WorkoutActivity extends Fragment {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                selectedFRAGE=true;
+            }
+        });
+
+        alert2.setNegativeButton("Exit", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        alert2.show();
+    }
+
+    public void dialognewexercise(View view) {
+        alert2 = new AlertDialog.Builder(getActivity());
+        alert2.setView(view).setCancelable(false);
+
+        ViewGroup parent = (ViewGroup) view.getParent();
+        if (parent != null) {
+            parent.removeView(view);
+        }
+        dialog2 = alert2.create();
+
+        final EditText name = view.findViewById(R.id.editText);
+        final EditText wdh = view.findViewById(R.id.editTextWDH);
+        final EditText time = view.findViewById(R.id.editTextTime);
+
+        alert2.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if(wdh.getText().toString().trim() == null|| wdh.getText().toString().trim() == "0")
+                {
+                    if (time.getText().toString().trim()==null||time.getText().toString().trim()=="0")
+                    {
+                        Toast.makeText(getContext(),"FEHLER BEI DER ERSTELLUNG EINER NEUEN ÜBUNG",Toast.LENGTH_LONG).show();
+                    }else {
+
+                        Workouts wo = new Workouts(name.getText().toString().trim(), -1, null, Long.valueOf(time.getText().toString().trim()));
+                        WOlist.add(wo);
+                    }
+                }
+                else if(time.getText().toString().trim()==null||time.getText().toString().trim()=="0")
+                {
+                    if(wdh.getText().toString().trim() == null|| wdh.getText().toString().trim() == "0")
+                    {
+
+                        Toast.makeText(getContext(),"FEHLER BEI DER ERSTELLUNG EINER NEUEN ÜBUNG",Toast.LENGTH_LONG).show();
+                    }
+                    else
+                    {
+                        Workouts wo = new Workouts(name.getText().toString().trim(), Integer.valueOf(wdh.getText().toString().trim()), null, -1);
+                        WOlist.add(wo);
+                    }
+                }
+
+                else
+                {
+                    Workouts wo = new Workouts(name.getText().toString().trim(), Integer.valueOf(wdh.getText().toString().trim()), null, Long.valueOf(time.getText().toString().trim()));
+                    WOlist.add(wo);
+                }
+
             }
         });
 
