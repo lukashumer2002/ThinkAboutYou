@@ -50,4 +50,6 @@ public class Workouts {
     public String toString() {
         return name+";"+wdh+";"+imagePath+";"+time;
     }
+
+
 }

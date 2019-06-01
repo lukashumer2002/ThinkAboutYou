@@ -21,7 +21,11 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -274,24 +278,68 @@ public class WorkoutActivity extends Fragment {
         });
         alert2.show();
     }
+    public void writeCsv1(Workouts workouts)  {
 
-//    public void writeCsv1(String x)  {
+        String filename = "WOs.csv";
+        try
+        {
+            FileOutputStream fos = getContext().openFileOutput(filename, MODE_PRIVATE | MODE_APPEND);
+            PrintWriter out = new PrintWriter(new OutputStreamWriter(fos));
+
+            out.println(workouts.toString());
+
+            out.flush();
+            out.close();
+
+
+        }catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+    }
+
+    public void loadApplication() {
+        String filename = "WOs.csv";
+        WOlist.clear();
+
+        try {
+            FileInputStream fis = getContext().openFileInput(filename);
+            BufferedReader br = new BufferedReader(new InputStreamReader(fis));
+
+            String line;
+            int c = 0;
+            try {
+                while ((line = br.readLine()) != null) {
+                    if (c == 0) {
+                        c = 1;
+                        line = br.readLine();
+                    }
+                    String[] arr = line.split(",");
+                    String name = arr[0] + "";
+                    String wdh = arr[1] + "";
+                    String imagepath = arr[2] + "";
+                    String time = arr[3] + "";
+//                    if (Integer.valueOf(wdh)==-1)
+//                    {
 //
-//        String filename = "Übungen.csv";
-//        try
-//        {
-//            FileOutputStream fos = openFileOutput(filename, MODE_PRIVATE | MODE_APPEND);
-//            PrintWriter out = new PrintWriter(new OutputStreamWriter(fos));
-//            out.println(x);
-//            out.flush();
-//            out.close();
+//                    }
+//                    else if(Long.valueOf(time)==-1)
+//                    {
 //
-//
-//        }catch (Exception e)
-//        {
-//            e.printStackTrace();
-//        }
-//    }
+//                    }
+                    WOlist.add(new Workouts(name, Integer.valueOf(wdh), imagepath, Long.valueOf(time)));
+
+                }
+            } catch (Exception e) {
+                //readAssets();
+                e.printStackTrace();
+            }
+        } catch (FileNotFoundException e) {
+            //readAssets();
+            System.out.println("Keine Datei gefunden!");
+        }
+    }
+
 
 
 }
