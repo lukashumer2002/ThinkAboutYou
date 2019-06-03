@@ -66,10 +66,8 @@ public class WorkoutActivity extends Fragment {
         WOfab.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                //add a NEW WO
+                //add a NEW GESWO
                 dialogcreateWO(View.inflate(getActivity(), R.layout.wofabaction, null));
-
-
             }
         });
 
@@ -78,7 +76,6 @@ public class WorkoutActivity extends Fragment {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 Workouts selected = WOlist.get(position);
                 dialogplayWO(View.inflate(getActivity(), R.layout.test, null), selected.getName());
-
             }
 
             @Override
@@ -92,13 +89,11 @@ public class WorkoutActivity extends Fragment {
     public ShowWorkouts_Adapter setAdapter()
     {
         return showWorkouts_adapter = new ShowWorkouts_Adapter(getContext(),WOlist);
-
     }
 
     public void dialogplayWO( View view, String txt) {
         alert = new AlertDialog.Builder(getActivity());
         alert.setView(view).setCancelable(false);
-
         ViewGroup parent = (ViewGroup) view.getParent();
         if (parent != null) {
             parent.removeView(view);
@@ -130,7 +125,6 @@ public class WorkoutActivity extends Fragment {
 
     public void dialogcreateWO(View view)
     {
-
         alert = new AlertDialog.Builder(getActivity());
         alert.setView(view).setCancelable(false);
         ViewGroup parent = (ViewGroup) view.getParent();
@@ -166,7 +160,6 @@ public class WorkoutActivity extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Workouts selected1 = WOlist.get(position);
-
                 dialog(View.inflate(getActivity(), R.layout.test, null), selected1.getName());
                 if (selectedFRAGE)
                 {
@@ -179,7 +172,6 @@ public class WorkoutActivity extends Fragment {
         alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-
                 GesammtWO gesammtWO = new GesammtWO(name.getText().toString().trim(), newList);
                 KINGlist.add(gesammtWO);
                 newList.clear();
@@ -199,6 +191,7 @@ public class WorkoutActivity extends Fragment {
     public void dialog(View view, String txt) {
         alert2 = new AlertDialog.Builder(getActivity());
         alert2.setView(view).setCancelable(false);
+        TextView tv9 = view.findViewById(R.id.textView9);
 
         ViewGroup parent = (ViewGroup) view.getParent();
         if (parent != null) {
@@ -206,7 +199,7 @@ public class WorkoutActivity extends Fragment {
         }
         dialog2 = alert2.create();
 
-        alert.setMessage("Möchtest du wirklich" +txt+" hinzufügen?");
+        tv9.setText("Möchtest du wirklich" +txt+" hinzufügen?");
 
         alert2.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
             @Override
