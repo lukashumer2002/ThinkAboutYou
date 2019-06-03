@@ -50,6 +50,7 @@ public class WorkoutActivity extends Fragment {
     Fragment f1 = new WOplayer();
     boolean selectedFRAGE;
 
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -59,11 +60,14 @@ public class WorkoutActivity extends Fragment {
         selectedFRAGE = false;
         WOlistView = view.findViewById(R.id.WOListView);
         WOfab = view.findViewById(R.id.WOfloatingActionButton);
+
         WOfab.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
                 //add a NEW WO
                 dialogcreateWO(View.inflate(getActivity(), R.layout.wofabaction, null));
+
+                WOlistView.setAdapter(setAdapter());
             }
         });
 
@@ -83,9 +87,9 @@ public class WorkoutActivity extends Fragment {
         return view;
     }
 
-    public void setAdapter()
+    public ShowWorkouts_Adapter setAdapter()
     {
-        showWorkouts_adapter = new ShowWorkouts_Adapter(getContext(),WOlist);
+        return showWorkouts_adapter = new ShowWorkouts_Adapter(getContext(),WOlist);
 
     }
 
@@ -127,7 +131,6 @@ public class WorkoutActivity extends Fragment {
         final List<Workouts> newList = new ArrayList<>();
         alert = new AlertDialog.Builder(getActivity());
         alert.setView(view).setCancelable(false);
-
         ViewGroup parent = (ViewGroup) view.getParent();
         if (parent != null) {
             parent.removeView(view);
@@ -136,19 +139,18 @@ public class WorkoutActivity extends Fragment {
         TextView tv = view.findViewById(R.id.textView5);
         final EditText name = view.findViewById(R.id.WOfabeditText);
         ListView lv = view.findViewById(R.id.WOfabListView);
-
+        loadApplication();
         FloatingActionButton fabWOcreate = view.findViewById(R.id.fabcreatewo);
-
+        lv.setAdapter(setAdapter());
         fabWOcreate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v)
             {
                 View view = View.inflate(getActivity(), R.layout.addnewexercise, null);
                 dialognewexercise(view);
-
-
             }
         });
+
 
 
         lv.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -236,27 +238,30 @@ public class WorkoutActivity extends Fragment {
         alert2.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                if(wdh.getText().toString().trim() == null|| wdh.getText().toString().trim() == "0")
+                if(wdh.getText().toString().trim() == ""|| wdh.getText().toString().trim() == "0")
                 {
-                    if (time.getText().toString().trim()==null||time.getText().toString().trim()=="0")
+                    if (time.getText().toString().trim()==""||time.getText().toString().trim()=="0")
                     {
                         Toast.makeText(getContext(),"FEHLER BEI DER ERSTELLUNG EINER NEUEN ÜBUNG",Toast.LENGTH_LONG).show();
                     }else {
 
                         Workouts wo = new Workouts(name.getText().toString().trim(), -1, null, Long.valueOf(time.getText().toString().trim()));
+                        writeCsv1(wo);
                         WOlist.add(wo);
                     }
                 }
-                else if(time.getText().toString().trim()==null||time.getText().toString().trim()=="0")
+                else if(time.getText().toString().trim()==""||time.getText().toString().trim()=="0")
                 {
-                    if(wdh.getText().toString().trim() == null|| wdh.getText().toString().trim() == "0")
+                    if(wdh.getText().toString().trim() == ""|| wdh.getText().toString().trim() == "0")
                     {
 
                         Toast.makeText(getContext(),"FEHLER BEI DER ERSTELLUNG EINER NEUEN ÜBUNG",Toast.LENGTH_LONG).show();
                     }
                     else
                     {
+
                         Workouts wo = new Workouts(name.getText().toString().trim(), Integer.valueOf(wdh.getText().toString().trim()), null, -1);
+                        writeCsv1(wo);
                         WOlist.add(wo);
                     }
                 }
@@ -264,6 +269,7 @@ public class WorkoutActivity extends Fragment {
                 else
                 {
                     Workouts wo = new Workouts(name.getText().toString().trim(), Integer.valueOf(wdh.getText().toString().trim()), null, Long.valueOf(time.getText().toString().trim()));
+                    writeCsv1(wo);
                     WOlist.add(wo);
                 }
 
@@ -307,18 +313,14 @@ public class WorkoutActivity extends Fragment {
             BufferedReader br = new BufferedReader(new InputStreamReader(fis));
 
             String line;
-            int c = 0;
+
             try {
                 while ((line = br.readLine()) != null) {
-                    if (c == 0) {
-                        c = 1;
-                        line = br.readLine();
-                    }
-                    String[] arr = line.split(",");
-                    String name = arr[0] + "";
-                    String wdh = arr[1] + "";
-                    String imagepath = arr[2] + "";
-                    String time = arr[3] + "";
+                    String[] arr = line.split(";");
+                    String name = arr[0];
+                    String wdh = arr[1];
+                    String imagepath = arr[2];
+                    String time = arr[3];
 //                    if (Integer.valueOf(wdh)==-1)
 //                    {
 //
@@ -327,6 +329,11 @@ public class WorkoutActivity extends Fragment {
 //                    {
 //
 //                    }
+                    if(imagepath==null)
+                    {
+                        imagepath="-1";
+                    }
+
                     WOlist.add(new Workouts(name, Integer.valueOf(wdh), imagepath, Long.valueOf(time)));
 
                 }
@@ -338,8 +345,7 @@ public class WorkoutActivity extends Fragment {
             //readAssets();
             System.out.println("Keine Datei gefunden!");
         }
+
+        setAdapter();
     }
-
-
-
 }
