@@ -43,13 +43,13 @@ public class WorkoutActivity extends Fragment {
     FloatingActionButton WOfab;
     AlertDialog dialog;
     AlertDialog.Builder alert;
-
     AlertDialog dialog2;
     AlertDialog.Builder alert2;
     FragmentManager fragmentManager = getFragmentManager();
     Fragment f1 = new WOplayer();
     boolean selectedFRAGE;
-
+    boolean setAdapterUeberprüfung;
+    List<Workouts> newList;
 
     @Nullable
     @Override
@@ -58,6 +58,8 @@ public class WorkoutActivity extends Fragment {
         WOlist = new ArrayList<>();
         KINGlist = new ArrayList<>();
         selectedFRAGE = false;
+        newList = new ArrayList<>();
+        setAdapterUeberprüfung=false;
         WOlistView = view.findViewById(R.id.WOListView);
         WOfab = view.findViewById(R.id.WOfloatingActionButton);
 
@@ -67,7 +69,7 @@ public class WorkoutActivity extends Fragment {
                 //add a NEW WO
                 dialogcreateWO(View.inflate(getActivity(), R.layout.wofabaction, null));
 
-                WOlistView.setAdapter(setAdapter());
+
             }
         });
 
@@ -128,7 +130,7 @@ public class WorkoutActivity extends Fragment {
 
     public void dialogcreateWO(View view)
     {
-        final List<Workouts> newList = new ArrayList<>();
+
         alert = new AlertDialog.Builder(getActivity());
         alert.setView(view).setCancelable(false);
         ViewGroup parent = (ViewGroup) view.getParent();
@@ -148,14 +150,21 @@ public class WorkoutActivity extends Fragment {
             {
                 View view = View.inflate(getActivity(), R.layout.addnewexercise, null);
                 dialognewexercise(view);
+                setAdapterUeberprüfung=true;
             }
+
+
         });
 
+        if (setAdapterUeberprüfung)
+        {
+            lv.setAdapter(setAdapter());
+            setAdapterUeberprüfung=false;
+        }
 
-
-        lv.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Workouts selected1 = WOlist.get(position);
 
                 dialog(View.inflate(getActivity(), R.layout.test, null), selected1.getName());
@@ -165,14 +174,7 @@ public class WorkoutActivity extends Fragment {
                     selectedFRAGE=false;
                 }
             }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
         });
-
-
 
         alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
             @Override
@@ -180,13 +182,14 @@ public class WorkoutActivity extends Fragment {
 
                 GesammtWO gesammtWO = new GesammtWO(name.getText().toString().trim(), newList);
                 KINGlist.add(gesammtWO);
-
+                newList.clear();
             }
         });
 
         alert.setNegativeButton("Exit", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                newList.clear();
                 dialog.dismiss();
             }
         });
@@ -254,7 +257,6 @@ public class WorkoutActivity extends Fragment {
                 {
                     if(wdh.getText().toString().trim() == ""|| wdh.getText().toString().trim() == "0")
                     {
-
                         Toast.makeText(getContext(),"FEHLER BEI DER ERSTELLUNG EINER NEUEN ÜBUNG",Toast.LENGTH_LONG).show();
                     }
                     else
