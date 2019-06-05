@@ -6,6 +6,7 @@ import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.os.Trace;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -58,6 +59,9 @@ public class WOplayer extends AppCompatActivity {
         imageview=findViewById(R.id.RUNimageview);
         textViewWdh = findViewById(R.id.textview_descritption);
         play =findViewById(R.id.RUNbuttonplay);
+        //currentWO=TRAINlist.get(0);
+        System.out.println("III: "+TRAINlist.toString());
+        //name.setText(currentWO.getName());
         pause = findViewById(R.id.RUNbuttonpause);
         play.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -65,7 +69,10 @@ public class WOplayer extends AppCompatActivity {
                 for (int i = 0; i < TRAINlist.size(); i++) {
                     currentWO=TRAINlist.get(i);
                     currenttime=currentWO.getTime();
+                    System.out.println("currenttime: "+currenttime);
+                    System.out.println("currentname"+ currentWO.getName());
                     name.setText(currentWO.getName());
+
                     play(currentWO,currenttime);
                 }
             }

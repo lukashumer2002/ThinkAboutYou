@@ -75,10 +75,10 @@ public class WorkoutActivity extends Fragment {
         currentWOList=new ArrayList<>();
         KINGlist = new ArrayList<>();
 
-        //loadApplication();
-        WOlist.add(new Workouts("Liegestütz",20,"liegestütz.jpg",50));
+        loadApplication();
+        WOlist.add(new Workouts("Liegestütze",20,"liegestütz.jpg",50));
 
-        KINGlist.add(new GesammtWO("Brust", WOlist));
+
         selectedFRAGE = false;
         setGesWoUeberprüfung=false;
         newList = new ArrayList<>();
@@ -86,8 +86,9 @@ public class WorkoutActivity extends Fragment {
         WOlistView = view.findViewById(R.id.WOListView);
         WOfab = view.findViewById(R.id.WOfloatingActionButton);
         WOlistView.setAdapter(setGesWoAdapter());
-        readFromDB();
+        //readFromDB();
         readKingList();
+        KINGlist.add(new GesammtWO("Brust", WOlist));
         if (setGesWoUeberprüfung)
         {
             System.out.println("War HIER, setGesWoUeberprüfung");
@@ -310,11 +311,13 @@ public class WorkoutActivity extends Fragment {
                         Workouts wo = new Workouts(name.getText().toString().trim(), Integer.valueOf(wdh.getText().toString().trim()), null, Long.valueOf(time.getText().toString().trim()));
 
                         WOlist.add(wo);
+                        writeCsv1(wo);
                         writeToDB(wo);
                     }else
                     {
                         Workouts wo = new Workouts(name.getText().toString().trim(), -1, null, Long.valueOf(time.getText().toString().trim()));
                         writeToDB(wo);
+                        writeCsv1(wo);
                         WOlist.add(wo);
                     }
 
@@ -323,6 +326,7 @@ public class WorkoutActivity extends Fragment {
                 {
                     Workouts wo = new Workouts(name.getText().toString().trim(), Integer.valueOf(wdh.getText().toString().trim()), null, -1);
                     writeToDB(wo);
+                    writeCsv1(wo);
                     WOlist.add(wo);
                 }
 
@@ -513,7 +517,7 @@ public class WorkoutActivity extends Fragment {
 
                     for (int i = 1; i < arr.length; i++) {
                         for (int j = 0; j < WOlist.size(); j++) {
-                            if(arr[i].equals(WOlist.get(j)))
+                            if(arr[i].equals(WOlist.get(j).getName()))
                             {
                                 currentreadList.add(WOlist.get(j));
                             }

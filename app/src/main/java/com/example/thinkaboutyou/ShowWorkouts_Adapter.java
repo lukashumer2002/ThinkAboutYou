@@ -86,6 +86,30 @@ public class ShowWorkouts_Adapter extends ArrayAdapter {
 
 
         }
+        else if (workouts.getImagePath()== null){
+            InputStream is = null;
+            try {
+                is = mngr.open("sports.jpg");
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+
+            //Get the texture from the Android resource directory
+            //InputStream is = context.getResources().openRawResource(R.drawable.radiocd5);
+            Bitmap bitmap = null;
+            try {
+                //BitmapFactory is an Android graphics utility for images
+                bitmap = BitmapFactory.decodeStream(is);
+                image.setImageBitmap(bitmap);
+                System.out.println("DONE");
+
+
+            }catch (Exception ex)
+            {
+                System.out.println("FAILED");
+            }
+        }
+
         return row;
     }
 
