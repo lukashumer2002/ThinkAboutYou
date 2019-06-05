@@ -47,7 +47,7 @@ public class RunActivity extends Fragment implements SensorEventListener {
         time.setText("00:00");
         TIMEpause = view.findViewById(R.id.RUNbuttonpause);
         TIMEplay = view.findViewById(R.id.RUNbuttonplay);
-        TIMEstop = view.findViewById(R.id.RUNbuttonstop);
+        TIMEstop = view.findViewById(R.id.buttonstop);
         sensorManager = (SensorManager) getActivity().getSystemService(SENSOR_SERVICE);
 
         TIMEplay.setOnClickListener(new View.OnClickListener() {

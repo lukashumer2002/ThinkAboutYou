@@ -82,7 +82,7 @@
                     android:text="PLAY" />
 
                 <Button
-                    android:id="@+id/RUNbuttonstop"
+                    android:id="@+id/buttonstop"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"

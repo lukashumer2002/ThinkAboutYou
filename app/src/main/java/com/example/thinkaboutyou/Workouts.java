@@ -39,16 +39,16 @@ public class Workouts {
     }
 
     public long getTime() {
-        return time;
+        return time*1000;
     }
 
     public void setTime(long time) {
-        this.time = time;
+        this.time = time*1000;
     }
 
     @Override
     public String toString() {
-        return name+";"+wdh+";"+imagePath+";"+time;
+        return name+";"+wdh+";"+imagePath+";"+time*1000;
     }
 
 

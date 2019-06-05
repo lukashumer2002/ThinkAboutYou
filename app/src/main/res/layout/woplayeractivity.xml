@@ -33,7 +33,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:textSize="40dp"
+                android:textSize="70dp"
                 />
         </TableRow>
 
@@ -47,8 +47,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="TextView"
-                android:textSize="70dp"
+                android:textSize="50dp"
                 tools:text="10:00" />
         </TableRow>
 
@@ -92,16 +91,6 @@
                 android:orientation="horizontal">
 
                 <Button
-                    android:id="@+id/RUNbuttonpause"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:background="@drawable/mybutton"
-                    android:drawableLeft="@drawable/ic_pausebutton"
-                    android:text="PAUSE"
-                    android:padding="10dp" />
-
-                <Button
                     android:id="@+id/RUNbuttonplay"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -110,6 +99,16 @@
                     android:drawableLeft="@drawable/ic_playbutton"
                     android:padding="10dp"
                     android:text="PLAY" />
+
+                <Button
+                    android:id="@+id/RUNbuttonpause"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/mybutton"
+                    android:drawableLeft="@drawable/ic_pausebutton"
+                    android:text="PAUSE"
+                    android:padding="10dp" />
 
                 <Button
                     android:id="@+id/buttonnext"
@@ -122,7 +121,7 @@
                     android:text="NEXT" />
 
                 <Button
-                    android:id="@+id/RUNbuttonstop"
+                    android:id="@+id/buttonstop"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"

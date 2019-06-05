@@ -46,6 +46,7 @@ import static android.content.Context.MODE_APPEND;
 import static android.content.Context.MODE_PRIVATE;
 
 public class WorkoutActivity extends Fragment {
+    private static List<Workouts> currentWOList;
     private TextView mTextMessage;
     ShowWorkouts_Adapter showWorkouts_adapter;
     List<Workouts> WOlist;
@@ -70,6 +71,7 @@ public class WorkoutActivity extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view= inflater.inflate(R.layout.activity_workout,container,false);
         WOlist = new ArrayList<>();
+        currentWOList=new ArrayList<>();
         KINGlist = new ArrayList<>();
         loadApplication();
         KINGlist.add(new GesammtWO("Brust", WOlist));
@@ -101,7 +103,7 @@ public class WorkoutActivity extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 GesammtWO gesammtWO = KINGlist.get(position);
-                dialogplayWO(View.inflate(getActivity(), R.layout.test, null), gesammtWO.getName());
+                dialogplayWO(View.inflate(getActivity(), R.layout.test, null), gesammtWO);
             }
         });
 
@@ -116,7 +118,7 @@ public class WorkoutActivity extends Fragment {
         return showWorkouts_adapter = new ShowWorkouts_Adapter(getContext(),WOlist);
     }
 
-    public void dialogplayWO( View view, String txt) {
+    public void dialogplayWO(View view, final GesammtWO ges) {
         alert = new AlertDialog.Builder(getActivity());
         alert.setView(view).setCancelable(false);
         ViewGroup parent = (ViewGroup) view.getParent();
@@ -126,7 +128,7 @@ public class WorkoutActivity extends Fragment {
         dialog = alert.create();
 
         TextView textView = view.findViewById(R.id.textView9);
-        textView.setText("Möchtest du wirklich " +txt+" durchführen?");
+        textView.setText("Möchtest du wirklich " +ges.getName()+" durchführen?");
 
         alert.setPositiveButton("TRAIN", new DialogInterface.OnClickListener() {
             @Override
@@ -134,6 +136,7 @@ public class WorkoutActivity extends Fragment {
              //----------------------------------------------------------------------------------
 
                Intent intent = new Intent(getActivity(), WOplayer.class);
+               currentWOList=ges.getWos();
                startActivity(intent);
 
                 //----------------------------------------------------------------------------------
@@ -424,4 +427,11 @@ public class WorkoutActivity extends Fragment {
                     }
                 });
     }
+
+    public static List<Workouts> getCurrentWOList()
+    {
+        return currentWOList;
+    }
+
+
 }
