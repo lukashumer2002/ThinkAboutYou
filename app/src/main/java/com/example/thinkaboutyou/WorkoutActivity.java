@@ -267,39 +267,65 @@ public class WorkoutActivity extends Fragment {
         alert2.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                if(wdh.getText().toString().trim() == ""|| wdh.getText().toString().trim() == "0")
-                {
-                    if (time.getText().toString().trim()==""||time.getText().toString().trim()=="0")
-                    {
-                        Toast.makeText(getContext(),"FEHLER BEI DER ERSTELLUNG EINER NEUEN ÜBUNG",Toast.LENGTH_LONG).show();
-                    }else {
+                boolean testwdh = false;
+                boolean testtime = false;
+                int wdh1;
+                long time1;
+                System.out.println("III:"+wdh.getText().toString()+";"+time.getText().toString());
 
+
+                //output:
+
+                //;;
+
+                try{
+                    wdh1 = Integer.valueOf(wdh.getText().toString());
+                    testwdh=true;
+
+                }catch (Exception ex)
+                {
+                    testwdh = false;
+                }
+
+                try{
+                    time1 = Long.valueOf(time.getText().toString());
+                    testtime=true;
+
+                }catch (Exception ex)
+                {
+                    testtime = false;
+                }
+
+                if (testtime)
+                {
+                    if (testwdh)
+                    {
+                        Workouts wo = new Workouts(name.getText().toString().trim(), Integer.valueOf(wdh.getText().toString().trim()), null, Long.valueOf(time.getText().toString().trim()));
+                        writeCsv1(wo);
+                        WOlist.add(wo);
+                    }else
+                    {
                         Workouts wo = new Workouts(name.getText().toString().trim(), -1, null, Long.valueOf(time.getText().toString().trim()));
                         writeCsv1(wo);
                         WOlist.add(wo);
                     }
-                }
-                else if(time.getText().toString().trim()==""||time.getText().toString().trim()=="0")
-                {
-                    if(wdh.getText().toString().trim() == ""|| wdh.getText().toString().trim() == "0")
-                    {
-                        Toast.makeText(getContext(),"FEHLER BEI DER ERSTELLUNG EINER NEUEN ÜBUNG",Toast.LENGTH_LONG).show();
-                    }
-                    else
-                    {
 
-                        Workouts wo = new Workouts(name.getText().toString().trim(), Integer.valueOf(wdh.getText().toString().trim()), null, -1);
-                        writeCsv1(wo);
-                        WOlist.add(wo);
-                    }
+                }
+                else if (testwdh)
+                {
+                    Workouts wo = new Workouts(name.getText().toString().trim(), Integer.valueOf(wdh.getText().toString().trim()), null, -1);
+                    writeCsv1(wo);
+                    WOlist.add(wo);
                 }
 
                 else
                 {
-                    Workouts wo = new Workouts(name.getText().toString().trim(), Integer.valueOf(wdh.getText().toString().trim()), null, Long.valueOf(time.getText().toString().trim()));
-                    writeCsv1(wo);
-                    WOlist.add(wo);
+                    Toast.makeText(getContext(),"FEHLER BEI DER ERSTELLUNG EINER NEUEN ÜBUNG",Toast.LENGTH_LONG).show();
                 }
+
+
+
+
 
             }
         });

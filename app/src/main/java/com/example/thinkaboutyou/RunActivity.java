@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Chronometer;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.common.base.Stopwatch;
 
@@ -24,8 +25,10 @@ import java.util.Locale;
 
 import static android.content.Context.SENSOR_SERVICE;
 
-public class RunActivity extends Fragment {
+public class RunActivity extends Fragment implements SensorEventListener{
 
+
+    int TOTALsteps;
     long pauseoffset;
     Chronometer chronometer;
     boolean isRunning;
@@ -68,6 +71,7 @@ public class RunActivity extends Fragment {
             @Override
             public void onClick(View v) {
                 pauseChronometer();
+                onPause();
             }
         });
 
@@ -75,6 +79,7 @@ public class RunActivity extends Fragment {
             @Override
             public void onClick(View v) {
                 resetChronometer();
+                onResume();
             }
         });
 //
@@ -149,6 +154,7 @@ public class RunActivity extends Fragment {
 
     }
 
+
 //    public void startTimer()
 //    {
 //        mCountdownTimer = new CountDownTimer(timeLeftInMills,1000) {
@@ -182,42 +188,43 @@ public class RunActivity extends Fragment {
 //        time.setText(timeLeftFormat);
 //    }
 //
-//    @Override
-//    public void onResume() {
-//        super.onResume();
-//        running=true;
-//        Sensor countsensor = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
-//        if(countsensor != null)
-//        {
-//            sensorManager.registerListener(this, countsensor,SensorManager.SENSOR_DELAY_UI);
-//
-//        }else
-//        {
-//            //Toast.makeText(this,"Sensor not found!", Toast.LENGTH_SHORT).show();
-//
-//
-//        }
-//    }
-//
-//    @Override
-//    public void onPause() {
-//        super.onPause();
-//        running=false;
-//
-//    }
-//
-//    @Override
-//    public void onSensorChanged(SensorEvent event) {
-//        if (running)
-//        {
-//            tv_steps.setText(String.valueOf(event.values));
-//        }
-//
-//    }
-//
-//    @Override
-//    public void onAccuracyChanged(Sensor sensor, int accuracy) {
-//
-//    }
+    @Override
+    public void onResume() {
+        super.onResume();
+        running=true;
+        Sensor countsensor = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
+        if(countsensor != null)
+        {
+            sensorManager.registerListener(this, countsensor,SensorManager.SENSOR_DELAY_UI);
+
+        }else
+        {
+            Toast.makeText(getContext(),"Sensor not found!", Toast.LENGTH_SHORT).show();
+
+
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        running=false;
+
+    }
+
+    @Override
+    public void onSensorChanged(SensorEvent event) {
+        if (running)
+        {
+            TOTALsteps= (int) event.values[0];
+            tv_steps.setText(String.valueOf(event.values[0]));
+        }
+
+    }
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+
+    }
 }
 
