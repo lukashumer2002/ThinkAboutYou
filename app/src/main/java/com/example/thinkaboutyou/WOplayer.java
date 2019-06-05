@@ -76,18 +76,20 @@ public class WOplayer extends AppCompatActivity {
                     System.out.println("currenttime: " + currenttime);
                     System.out.println("currentname" + currentWO.getName());
                     name.setText(currentWO.getName());
+
+                    System.out.println("");
                     if (currentWO.getImagePath() != null) {
                         setImage(currentWO.getImagePath());
                     }
                     else
                     {
-                        setImage("sports.jpg");
+                        setImage("sports123.jpg");
                     }
 
                     play(currentWO, currenttime);
                 }
                 Toast.makeText(getApplicationContext(), "Du hast dein Workout abgeschlossen!!!", Toast.LENGTH_LONG).show();
-                switchbackToFragment();
+                //switchbackToFragment();
             }
         });
 
@@ -253,7 +255,8 @@ public class WOplayer extends AppCompatActivity {
         alert2.show();
     }
 
-    public void setImage(String path) {
+    public void setImage(String path)
+    {
 
         AssetManager mngr = this.getAssets();
         InputStream is = null;
