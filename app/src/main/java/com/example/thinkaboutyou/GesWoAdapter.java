@@ -29,10 +29,12 @@ public class GesWoAdapter extends ArrayAdapter {
         View row =  inflater.inflate(R.layout.showworkouts,null,false);
 
 
-        TextView description = (TextView) row.findViewById(R.id.WOdescription);
-        ImageView image = (ImageView) row.findViewById(R.id.WOimageView);
+
 
         GesammtWO gesammtWO = geswo.get(position);
+
+        TextView description = (TextView) row.findViewById(R.id.WOdescription);
+        ImageView image = (ImageView) row.findViewById(R.id.WOimageView);
 
         description.setText(gesammtWO.getName());
 

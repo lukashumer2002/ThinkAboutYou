@@ -1,27 +1,33 @@
 package com.example.thinkaboutyou;
 
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.CountDownTimer;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Adapter;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
@@ -31,8 +37,11 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import static android.content.ContentValues.TAG;
 import static android.content.Context.MODE_APPEND;
 import static android.content.Context.MODE_PRIVATE;
 
@@ -47,11 +56,12 @@ public class WorkoutActivity extends Fragment {
     AlertDialog.Builder alert;
     AlertDialog dialog2;
     AlertDialog.Builder alert2;
-    GesammtWO adapterGesWO;
+    GesWoAdapter adapterGesWO;
     FragmentManager fragmentManager = getFragmentManager();
-    Fragment f1 = new WOplayer();
+    //Fragment f1 = new WOplayer();
     boolean selectedFRAGE;
     boolean setAdapterUeberprüfung;
+    FirebaseFirestore db;
     boolean setGesWoUeberprüfung;
     List<Workouts> newList;
 
@@ -61,19 +71,24 @@ public class WorkoutActivity extends Fragment {
         View view= inflater.inflate(R.layout.activity_workout,container,false);
         WOlist = new ArrayList<>();
         KINGlist = new ArrayList<>();
+        loadApplication();
+        KINGlist.add(new GesammtWO("Brust", WOlist));
         selectedFRAGE = false;
+        FirebaseFirestore.getInstance();
         setGesWoUeberprüfung=false;
         newList = new ArrayList<>();
         setAdapterUeberprüfung=false;
         WOlistView = view.findViewById(R.id.WOListView);
         WOfab = view.findViewById(R.id.WOfloatingActionButton);
-
+        WOlistView.setAdapter(setGesWoAdapter());
 
         if (setGesWoUeberprüfung)
         {
+            System.out.println("War HIER, setGesWoUeberprüfung");
             WOlistView.setAdapter((ListAdapter) setGesWoAdapter());
             setGesWoUeberprüfung=false;
         }
+
         WOfab.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
@@ -82,18 +97,17 @@ public class WorkoutActivity extends Fragment {
             }
         });
 
-        WOlistView.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        WOlistView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                Workouts selected = WOlist.get(position);
-                dialogplayWO(View.inflate(getActivity(), R.layout.test, null), selected.getName());
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                GesammtWO gesammtWO = KINGlist.get(position);
+                dialogplayWO(View.inflate(getActivity(), R.layout.test, null), gesammtWO.getName());
             }
         });
+
+
+
+
         return view;
     }
 
@@ -111,7 +125,8 @@ public class WorkoutActivity extends Fragment {
         }
         dialog = alert.create();
 
-        alert.setMessage("Möchtest du wirklich" +txt+" durchführen?");
+        TextView textView = view.findViewById(R.id.textView9);
+        textView.setText("Möchtest du wirklich " +txt+" durchführen?");
 
         alert.setPositiveButton("TRAIN", new DialogInterface.OnClickListener() {
             @Override
@@ -187,9 +202,9 @@ public class WorkoutActivity extends Fragment {
             public void onClick(DialogInterface dialog, int which) {
                 GesammtWO gesammtWO = new GesammtWO(name.getText().toString().trim(), newList);
                 KINGlist.add(gesammtWO);
+                setGesWoUeberprüfung=true;
                 newList.clear();
-
-
+                System.out.println("War HIER, "+ gesammtWO.getName());
             }
         });
 
@@ -359,9 +374,54 @@ public class WorkoutActivity extends Fragment {
 
     }
 
-    public GesammtWO setGesWoAdapter()
+    public GesWoAdapter setGesWoAdapter()
     {
-        return adapterGesWO = new GesammtWO(getContext(),KINGlist);
+        return adapterGesWO = new GesWoAdapter(getContext(),KINGlist);
+    }
 
+    public void writeToDB(Workouts workouts)
+    {
+        Map<Integer,Workouts> wo = new HashMap<>();
+        wo.put(WOlist.size(),workouts);
+
+
+
+        db.collection("WOs")
+                .add(wo)
+                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    @Override
+                    public void onSuccess(DocumentReference documentReference) {
+                        Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error adding document", e);
+                    }
+                });
+    }
+
+    public void readFromDB()
+    {
+        db.collection("WOs")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+
+                            WOlist.clear();
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                Log.d(TAG, document.getId() + " => " + document.getData());
+                                Map<String, Object> wo = document.getData();
+                                WOlist.add((Workouts) wo.values());
+
+                            }
+                        } else {
+                            Log.w(TAG, "Error getting documents.", task.getException());
+                        }
+                    }
+                });
     }
 }

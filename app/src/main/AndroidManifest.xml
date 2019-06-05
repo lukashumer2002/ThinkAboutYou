@@ -12,6 +12,9 @@
         <activity
             android:name=".KcalActivity"
             android:label="@string/title_activity_kcal"></activity>
+
+        <activity android:name=".WOplayer"
+            android:label="WOplayer"></activity>
         <activity
             android:name=".WorkoutActivity"
             android:label="@string/title_activity_workout" />

@@ -5,13 +5,14 @@ import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
-public class WOplayer extends Fragment {
+public class WOplayer extends AppCompatActivity {
 
     TextView countdown;
     private CountDownTimer countDownTimer;
@@ -20,19 +21,20 @@ public class WOplayer extends Fragment {
     private boolean timerunning;
     TextView pause;
 
-
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view=  inflater.inflate(R.layout.woplayeractivity,container,false);
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.woplayeractivity);
         timerunning=false;
-        countdown = view.findViewById(R.id.RUNtextview_time);
-        play = view.findViewById(R.id.RUNbuttonplay);
+        countdown =findViewById(R.id.RUNtextview_time);
+        play =findViewById(R.id.RUNbuttonplay);
         play.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startTimer();
             }
         });
-        pause = view.findViewById(R.id.RUNbuttonpause);
+        pause = findViewById(R.id.RUNbuttonpause);
         pause.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -40,8 +42,9 @@ public class WOplayer extends Fragment {
             }
         });
 
-        return view;
     }
+
+
 
 
     public void startTimer()
