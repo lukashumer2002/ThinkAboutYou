@@ -74,6 +74,7 @@ public class WorkoutActivity extends Fragment {
         currentWOList=new ArrayList<>();
         KINGlist = new ArrayList<>();
         loadApplication();
+        readKingList();
         KINGlist.add(new GesammtWO("Brust", WOlist));
         selectedFRAGE = false;
         FirebaseFirestore.getInstance();
@@ -205,6 +206,7 @@ public class WorkoutActivity extends Fragment {
             public void onClick(DialogInterface dialog, int which) {
                 GesammtWO gesammtWO = new GesammtWO(name.getText().toString().trim(), newList);
                 KINGlist.add(gesammtWO);
+                writeKingList(gesammtWO);
                 setGesWoUeberprüfung=true;
                 newList.clear();
                 System.out.println("War HIER, "+ gesammtWO.getName());
@@ -277,6 +279,7 @@ public class WorkoutActivity extends Fragment {
                 //output:
 
                 //;;
+
 
                 try{
                     wdh1 = Integer.valueOf(wdh.getText().toString());
@@ -457,6 +460,74 @@ public class WorkoutActivity extends Fragment {
     public static List<Workouts> getCurrentWOList()
     {
         return currentWOList;
+    }
+
+    public void writeKingList(GesammtWO gesammtWO)
+    {
+        String filename = "KingList.csv";
+        try
+        {
+            FileOutputStream fos = getContext().openFileOutput(filename, MODE_PRIVATE | MODE_APPEND);
+            PrintWriter out = new PrintWriter(new OutputStreamWriter(fos));
+
+            String x = gesammtWO.getName();
+            for (int i = 0; i < gesammtWO.getWos().size(); i++) {
+
+                x+=";"+gesammtWO.getWos().get(i).getName();
+
+            }
+
+            out.println(x);
+
+            out.flush();
+            out.close();
+
+
+        }catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+    }
+
+    public void readKingList()
+    {
+        String filename = "KingList.csv";
+        KINGlist.clear();
+
+        try {
+            FileInputStream fis = getContext().openFileInput(filename);
+            BufferedReader br = new BufferedReader(new InputStreamReader(fis));
+
+            String line;
+            List<Workouts> currentreadList = new ArrayList<>();
+            try {
+                while ((line = br.readLine()) != null) {
+                    String[] arr = line.split(";");
+                    String name = arr[0];
+
+
+                    for (int i = 1; i < arr.length; i++) {
+                        for (int j = 0; j < WOlist.size(); j++) {
+                            if(arr[i].equals(WOlist.get(j)))
+                            {
+                                currentreadList.add(WOlist.get(j));
+                            }
+                        }
+                    }
+
+                    GesammtWO ges =  new GesammtWO(name, currentreadList);
+                    KINGlist.add(ges);
+
+                }
+            } catch (Exception e) {
+                //readAssets();
+                e.printStackTrace();
+            }
+        } catch (FileNotFoundException e) {
+            //readAssets();
+            System.out.println("Keine Datei gefunden!");
+        }
+
     }
 
 

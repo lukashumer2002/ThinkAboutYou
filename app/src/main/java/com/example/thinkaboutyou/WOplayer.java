@@ -1,5 +1,7 @@
 package com.example.thinkaboutyou;
 
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
@@ -7,6 +9,7 @@ import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,12 +17,16 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import java.util.List;
 
 public class WOplayer extends AppCompatActivity {
     private static long currenttime;
     TextView name;
     Button next;
+    AlertDialog.Builder alert2;
+    AlertDialog dialog2;
     Button stop;
     ImageView imageview;
     TextView textViewWdh;
@@ -63,6 +70,8 @@ public class WOplayer extends AppCompatActivity {
                 }
             }
         });
+
+        stopButton();
 
 
         //nextButtton();
@@ -137,14 +146,13 @@ public class WOplayer extends AppCompatActivity {
     public void stopTimer()
     {
         countDownTimer.cancel();
+        currenttime=0;
         timerunning = false;
     }
 
     public void play(Workouts myWorkout, long currenttime)
     {
         System.out.println("III Daten: "+myWorkout.toString());
-
-
 
             if (currenttime>0) {
 
@@ -170,11 +178,11 @@ public class WOplayer extends AppCompatActivity {
             }
 
             nextButtton();
+            stopButton();
     }
 
     public void nextButtton()
     {
-
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -183,6 +191,10 @@ public class WOplayer extends AppCompatActivity {
                 if(TRAINlist.size()==counter)
                 {
                     //fertig
+
+                   Toast.makeText(getApplicationContext(),"Du hast dein Workout abgeschlossen!!!", Toast.LENGTH_LONG).show();
+                   switchbackToFragment();
+
                 }
                 else {
                     mochMoiPause();
@@ -201,6 +213,51 @@ public class WOplayer extends AppCompatActivity {
         Workouts workouts = new Workouts("Pause",-1,null,20);
         name.setText(workouts.getName());
         play(workouts,20000);
+    }
+
+    public void switchbackToFragment()
+    {
+        Intent intent = new Intent(this,WorkoutActivity.class);
+        startActivity(intent);
+    }
+
+    public void stopButton()
+    {
+        stop.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog(View.inflate(getApplicationContext(), R.layout.test, null));
+            }
+        });
+    }
+
+    public void dialog(View view) {
+        alert2 = new AlertDialog.Builder(this);
+        alert2.setView(view).setCancelable(false);
+        TextView tv9 = view.findViewById(R.id.textView9);
+
+        ViewGroup parent = (ViewGroup) view.getParent();
+        if (parent != null) {
+            parent.removeView(view);
+        }
+        dialog2 = alert2.create();
+
+        tv9.setText("Möchtest du wirklich abbrechen?");
+
+        alert2.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+               switchbackToFragment();
+            }
+        });
+
+        alert2.setNegativeButton("Exit", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        alert2.show();
     }
 
 
