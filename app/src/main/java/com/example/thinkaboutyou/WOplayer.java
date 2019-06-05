@@ -2,6 +2,9 @@ package com.example.thinkaboutyou;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.AssetManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
@@ -20,6 +23,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 
 public class WOplayer extends AppCompatActivity {
@@ -42,41 +47,51 @@ public class WOplayer extends AppCompatActivity {
     int counter;
 
 
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.woplayeractivity);
-        timerunning=false;
+        timerunning = false;
         counter = 0;
         WorkoutActivity workoutActivity = new WorkoutActivity();
-        TRAINlist=workoutActivity.getCurrentWOList();
-        countdown =findViewById(R.id.RUNtextview_time);
+        TRAINlist = workoutActivity.getCurrentWOList();
+        countdown = findViewById(R.id.RUNtextview_time);
         next = findViewById(R.id.buttonnext);
-        name=findViewById(R.id.RUNtextview_steps);
-        stop=findViewById(R.id.buttonstop);
-        imageview=findViewById(R.id.RUNimageview);
+        name = findViewById(R.id.RUNtextview_steps);
+        stop = findViewById(R.id.buttonstop);
+        imageview = findViewById(R.id.RUNimageview);
         textViewWdh = findViewById(R.id.textview_descritption);
-        play =findViewById(R.id.RUNbuttonplay);
+        play = findViewById(R.id.RUNbuttonplay);
         //currentWO=TRAINlist.get(0);
-        System.out.println("III: "+TRAINlist.toString());
+        System.out.println("III: " + TRAINlist.toString());
         //name.setText(currentWO.getName());
         pause = findViewById(R.id.RUNbuttonpause);
         play.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 for (int i = 0; i < TRAINlist.size(); i++) {
-                    currentWO=TRAINlist.get(i);
-                    currenttime=currentWO.getTime();
-                    System.out.println("currenttime: "+currenttime);
-                    System.out.println("currentname"+ currentWO.getName());
+                    currentWO = TRAINlist.get(i);
+                    currenttime = currentWO.getTime();
+                    System.out.println("currenttime: " + currenttime);
+                    System.out.println("currentname" + currentWO.getName());
                     name.setText(currentWO.getName());
+                    if (currentWO.getImagePath() != null) {
+                        setImage(currentWO.getImagePath());
+                    }
+                    else
+                    {
+                        setImage("sports.jpg");
+                    }
 
-                    play(currentWO,currenttime);
+                    play(currentWO, currenttime);
                 }
+                Toast.makeText(getApplicationContext(), "Du hast dein Workout abgeschlossen!!!", Toast.LENGTH_LONG).show();
+                switchbackToFragment();
             }
         });
+
+
 
         stopButton();
 
@@ -85,42 +100,22 @@ public class WOplayer extends AppCompatActivity {
     }
 
 
-
-
-    public void startTimer()
-    {
-        countDownTimer = new CountDownTimer(currenttime, 1000){
+    public void startTimer() {
+        countDownTimer = new CountDownTimer(currenttime, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
-                currenttime=millisUntilFinished;
+                currenttime = millisUntilFinished;
                 updateTimer();
 
                 nextButtton();
 
-                if(millisUntilFinished==0)
-                {
-                    if(TRAINlist.size()==counter)
-                    {
-                        //fertig
-                    }
-                    else {
-                        mochMoiPause();
-                        counter++;
-                        currentWO=TRAINlist.get(counter);
-                        currenttime=currentWO.getTime();
-                        name.setText(currentWO.getName());
-                        play(currentWO,currenttime);
-                    }
+                if (millisUntilFinished == 0) {
+                    nextButtton();
                 }
 
-                pause.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        stopTimer();
-                    }
-                });
+                //pauseButton();
 
-                nextButtton();
+                //nextButtton();
             }
 
             @Override
@@ -129,85 +124,69 @@ public class WOplayer extends AppCompatActivity {
             }
 
 
-
         }.start();
-        timerunning=true;
+        timerunning = true;
     }
 
 
-    public void updateTimer()
-    {
-        int min = (int) currenttime/60000;
-        int sec = (int) currenttime%60000/1000;
+    public void updateTimer() {
+        int min = (int) currenttime / 60000;
+        int sec = (int) currenttime % 60000 / 1000;
 
         String abc;
 
-        String timeLeftText = ""+min;
-        timeLeftText+=":";
-        if(sec<10) timeLeftText+="0";
-        timeLeftText+=sec;
+        String timeLeftText = "" + min;
+        timeLeftText += ":";
+        if (sec < 10) timeLeftText += "0";
+        timeLeftText += sec;
 
         countdown.setText(timeLeftText);
     }
 
-    public void stopTimer()
-    {
+    public void stopTimer() {
         countDownTimer.cancel();
-        currenttime=0;
+        currenttime = 0;
         timerunning = false;
     }
 
-    public void play(Workouts myWorkout, long currenttime)
-    {
-        System.out.println("III Daten: "+myWorkout.toString());
 
-            if (currenttime>0) {
+    public void play(Workouts myWorkout, long currenttime) {
+        System.out.println("III Daten: " + myWorkout.toString());
 
-                startTimer();
-                System.out.println("III Time: "+currenttime);
-            }
-            else if (currenttime<0)
-            {
-                countdown.setText("");
-            }
+        if (currenttime > 0) {
 
-            if(myWorkout.getImagePath()!=null)
-            {
-                imageview.setImageURI(Uri.parse(myWorkout.getImagePath()));
-            }
-            if(myWorkout.getWdh()>0)
-            {
-                textViewWdh.setText(myWorkout.getWdh()+" WDH");
-            }
-            else if(myWorkout.getWdh()<0)
-            {
-                textViewWdh.setText("");
-            }
+            startTimer();
+            System.out.println("III Time: " + currenttime);
+        } else if (currenttime < 0) {
+            countdown.setText("");
 
-            nextButtton();
-            stopButton();
+        }
+
+        if (myWorkout.getWdh() > 0) {
+            textViewWdh.setText(myWorkout.getWdh() + " WDH");
+        } else if (myWorkout.getWdh() < 0) {
+            textViewWdh.setText("");
+        }
+        pauseButton();
+        nextButtton();
+        stopButton();
     }
 
-    public void nextButtton()
-    {
+    public void nextButtton() {
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 stopTimer();
-                if(TRAINlist.size()==counter)
-                {
+                if (TRAINlist.size() == counter) {
                     //fertig
 
-                   Toast.makeText(getApplicationContext(),"Du hast dein Workout abgeschlossen!!!", Toast.LENGTH_LONG).show();
-                   switchbackToFragment();
 
-                }
-                else {
-                    mochMoiPause();
+
+                } else {
+                    //mochMoiPause();
                     counter++;
-                    currentWO=TRAINlist.get(counter);
-                    currenttime=currentWO.getTime();
+                    currentWO = TRAINlist.get(counter);
+                    currenttime = currentWO.getTime();
 
 
                 }
@@ -215,25 +194,32 @@ public class WOplayer extends AppCompatActivity {
         });
     }
 
-    public void mochMoiPause()
-    {
-        Workouts workouts = new Workouts("Pause",-1,null,20);
-        name.setText(workouts.getName());
-        play(workouts,20000);
-    }
+//    public void mochMoiPause()
+//    {
+//        Workouts workouts = new Workouts("Pause",-1,null,20);
+//        name.setText(workouts.getName());
+//        play(workouts,20000);
+//    }
 
-    public void switchbackToFragment()
-    {
-        Intent intent = new Intent(this,WorkoutActivity.class);
+    public void switchbackToFragment() {
+        Intent intent = new Intent(this, WorkoutActivity.class);
         startActivity(intent);
     }
 
-    public void stopButton()
-    {
+    public void stopButton() {
         stop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dialog(View.inflate(getApplicationContext(), R.layout.test, null));
+            }
+        });
+    }
+
+    public void pauseButton() {
+        pause.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                stopTimer();
             }
         });
     }
@@ -254,7 +240,7 @@ public class WOplayer extends AppCompatActivity {
         alert2.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-               switchbackToFragment();
+                switchbackToFragment();
             }
         });
 
@@ -267,6 +253,29 @@ public class WOplayer extends AppCompatActivity {
         alert2.show();
     }
 
+    public void setImage(String path) {
+
+        AssetManager mngr = this.getAssets();
+        InputStream is = null;
+        try {
+            is = mngr.open(path);
+        } catch (IOException e1) {
+            System.out.println("ERROR!!!");
+        }
+
+        //Get the texture from the Android resource directory
+        //InputStream is = context.getResources().openRawResource(R.drawable.radiocd5);
+        Bitmap bitmap = null;
+        try {
+            //BitmapFactory is an Android graphics utility for images
+            bitmap = BitmapFactory.decodeStream(is);
+            imageview.setImageBitmap(bitmap);
+            System.out.println("DONE");
 
 
+        } catch (Exception ex) {
+            System.out.println("FAILED");
+        }
+
+    }
 }

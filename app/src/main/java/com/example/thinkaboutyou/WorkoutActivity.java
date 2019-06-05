@@ -195,10 +195,12 @@ public class WorkoutActivity extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Workouts selected1 = WOlist.get(position);
+                Workouts pause = new Workouts("Pause",-1,"sports.jpg",30);
                 dialog(View.inflate(getActivity(), R.layout.test, null), selected1.getName());
                 if (selectedFRAGE)
                 {
                     newList.add(selected1);
+                    newList.add(pause);
                     selectedFRAGE=false;
                 }
             }
@@ -503,6 +505,7 @@ public class WorkoutActivity extends Fragment {
         String filename = "KingList.csv";
         KINGlist.clear();
 
+
         try {
             FileInputStream fis = getContext().openFileInput(filename);
             BufferedReader br = new BufferedReader(new InputStreamReader(fis));
@@ -520,9 +523,12 @@ public class WorkoutActivity extends Fragment {
                             if(arr[i].equals(WOlist.get(j).getName()))
                             {
                                 currentreadList.add(WOlist.get(j));
+
                             }
                         }
                     }
+
+
 
                     GesammtWO ges =  new GesammtWO(name, currentreadList);
                     KINGlist.add(ges);
