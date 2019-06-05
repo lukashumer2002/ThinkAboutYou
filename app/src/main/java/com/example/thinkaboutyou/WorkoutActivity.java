@@ -14,9 +14,11 @@ import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -45,10 +47,12 @@ public class WorkoutActivity extends Fragment {
     AlertDialog.Builder alert;
     AlertDialog dialog2;
     AlertDialog.Builder alert2;
+    GesammtWO adapterGesWO;
     FragmentManager fragmentManager = getFragmentManager();
     Fragment f1 = new WOplayer();
     boolean selectedFRAGE;
     boolean setAdapterUeberprüfung;
+    boolean setGesWoUeberprüfung;
     List<Workouts> newList;
 
     @Nullable
@@ -58,11 +62,18 @@ public class WorkoutActivity extends Fragment {
         WOlist = new ArrayList<>();
         KINGlist = new ArrayList<>();
         selectedFRAGE = false;
+        setGesWoUeberprüfung=false;
         newList = new ArrayList<>();
         setAdapterUeberprüfung=false;
         WOlistView = view.findViewById(R.id.WOListView);
         WOfab = view.findViewById(R.id.WOfloatingActionButton);
 
+
+        if (setGesWoUeberprüfung)
+        {
+            WOlistView.setAdapter((ListAdapter) setGesWoAdapter());
+            setGesWoUeberprüfung=false;
+        }
         WOfab.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
@@ -138,6 +149,8 @@ public class WorkoutActivity extends Fragment {
         loadApplication();
         FloatingActionButton fabWOcreate = view.findViewById(R.id.fabcreatewo);
         lv.setAdapter(setAdapter());
+
+
         fabWOcreate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v)
@@ -175,6 +188,8 @@ public class WorkoutActivity extends Fragment {
                 GesammtWO gesammtWO = new GesammtWO(name.getText().toString().trim(), newList);
                 KINGlist.add(gesammtWO);
                 newList.clear();
+
+
             }
         });
 
@@ -341,6 +356,12 @@ public class WorkoutActivity extends Fragment {
             System.out.println("Keine Datei gefunden!");
         }
 
-        setAdapter();
+
+    }
+
+    public GesammtWO setGesWoAdapter()
+    {
+        return adapterGesWO = new GesammtWO(getContext(),KINGlist);
+
     }
 }

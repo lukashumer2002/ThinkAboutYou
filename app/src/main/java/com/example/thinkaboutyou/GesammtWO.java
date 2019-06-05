@@ -1,5 +1,7 @@
 package com.example.thinkaboutyou;
 
+import android.content.Context;
+
 import java.util.List;
 
 public class GesammtWO {
@@ -12,7 +14,7 @@ public class GesammtWO {
         this.wos = wos;
     }
 
-    public GesammtWO() {
+    public GesammtWO(Context context, List<GesammtWO> KINGlist) {
 
     }
 
