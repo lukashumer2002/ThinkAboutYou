@@ -30,6 +30,7 @@ import java.util.List;
 public class WOplayer extends AppCompatActivity {
     private static long currenttime;
     TextView name;
+    boolean booleannext;
     Button next;
     AlertDialog.Builder alert2;
     AlertDialog dialog2;
@@ -53,6 +54,7 @@ public class WOplayer extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.woplayeractivity);
         timerunning = false;
+        booleannext =false;
         counter = 0;
         WorkoutActivity workoutActivity = new WorkoutActivity();
         TRAINlist = workoutActivity.getCurrentWOList();
@@ -71,6 +73,7 @@ public class WOplayer extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 for (int i = 0; i < TRAINlist.size(); i++) {
+                    savepoint:
                     currentWO = TRAINlist.get(i);
                     currenttime = currentWO.getTime();
                     System.out.println("currenttime: " + currenttime);
@@ -85,8 +88,47 @@ public class WOplayer extends AppCompatActivity {
                     {
                         setImage("sports123.jpg");
                     }
+                    System.out.println("III Daten: " + currentWO.toString());
 
-                    play(currentWO, currenttime);
+                    if (currenttime > 0) {
+                        startTimer();
+                        System.out.println("III Time: " + currenttime);
+                    } else if (currenttime < 0) {
+                        countdown.setText("");
+                    }
+
+                    if (currentWO.getWdh() > 0) {
+                        textViewWdh.setText(currentWO.getWdh() + " WDH");
+                    } else if (currentWO.getWdh() < 0)
+                    {
+                        textViewWdh.setText("");
+                    }
+
+                    pause.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            stopTimer();
+                        }
+                    });
+                    next.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            stopTimer();
+                            booleannext=true;
+                        }});
+
+                    if (booleannext)
+                    {
+                        //break savepoint;
+                    }
+
+
+                    stop.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            dialog(View.inflate(getApplicationContext(), R.layout.test, null));
+                        }
+                    });
                 }
                 Toast.makeText(getApplicationContext(), "Du hast dein Workout abgeschlossen!!!", Toast.LENGTH_LONG).show();
                 //switchbackToFragment();
@@ -94,11 +136,6 @@ public class WOplayer extends AppCompatActivity {
         });
 
 
-
-        stopButton();
-
-
-        //nextButtton();
     }
 
 
@@ -109,10 +146,10 @@ public class WOplayer extends AppCompatActivity {
                 currenttime = millisUntilFinished;
                 updateTimer();
 
-                nextButtton();
+                //nextButtton();            !!
 
                 if (millisUntilFinished == 0) {
-                    nextButtton();
+                    //nextButtton();
                 }
 
                 //pauseButton();
@@ -153,48 +190,11 @@ public class WOplayer extends AppCompatActivity {
 
 
     public void play(Workouts myWorkout, long currenttime) {
-        System.out.println("III Daten: " + myWorkout.toString());
 
-        if (currenttime > 0) {
 
-            startTimer();
-            System.out.println("III Time: " + currenttime);
-        } else if (currenttime < 0) {
-            countdown.setText("");
-
-        }
-
-        if (myWorkout.getWdh() > 0) {
-            textViewWdh.setText(myWorkout.getWdh() + " WDH");
-        } else if (myWorkout.getWdh() < 0) {
-            textViewWdh.setText("");
-        }
-        pauseButton();
-        nextButtton();
-        stopButton();
     }
 
-    public void nextButtton() {
-        next.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                stopTimer();
-                if (TRAINlist.size() == counter) {
-                    //fertig
 
-
-
-                } else {
-                    //mochMoiPause();
-                    counter++;
-                    currentWO = TRAINlist.get(counter);
-                    currenttime = currentWO.getTime();
-
-
-                }
-            }
-        });
-    }
 
 //    public void mochMoiPause()
 //    {
@@ -208,23 +208,8 @@ public class WOplayer extends AppCompatActivity {
         startActivity(intent);
     }
 
-    public void stopButton() {
-        stop.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog(View.inflate(getApplicationContext(), R.layout.test, null));
-            }
-        });
-    }
 
-    public void pauseButton() {
-        pause.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                stopTimer();
-            }
-        });
-    }
+
 
     public void dialog(View view) {
         alert2 = new AlertDialog.Builder(this);
