@@ -70,21 +70,24 @@ public class WorkoutActivity extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view= inflater.inflate(R.layout.activity_workout,container,false);
+        FirebaseFirestore.getInstance();
         WOlist = new ArrayList<>();
         currentWOList=new ArrayList<>();
         KINGlist = new ArrayList<>();
-        loadApplication();
-        readKingList();
+
+        //loadApplication();
+        WOlist.add(new Workouts("Liegestütz",20,"liegestütz.jpg",50));
+
         KINGlist.add(new GesammtWO("Brust", WOlist));
         selectedFRAGE = false;
-        FirebaseFirestore.getInstance();
         setGesWoUeberprüfung=false;
         newList = new ArrayList<>();
         setAdapterUeberprüfung=false;
         WOlistView = view.findViewById(R.id.WOListView);
         WOfab = view.findViewById(R.id.WOfloatingActionButton);
         WOlistView.setAdapter(setGesWoAdapter());
-
+        readFromDB();
+        readKingList();
         if (setGesWoUeberprüfung)
         {
             System.out.println("War HIER, setGesWoUeberprüfung");
@@ -97,6 +100,7 @@ public class WorkoutActivity extends Fragment {
             public void onClick(View v) {
                 //add a NEW GESWO
                 dialogcreateWO(View.inflate(getActivity(), R.layout.wofabaction, null));
+                WOlistView.invalidateViews();
             }
         });
 
@@ -107,9 +111,6 @@ public class WorkoutActivity extends Fragment {
                 dialogplayWO(View.inflate(getActivity(), R.layout.test, null), gesammtWO);
             }
         });
-
-
-
 
         return view;
     }
@@ -164,10 +165,11 @@ public class WorkoutActivity extends Fragment {
         dialog = alert.create();
         TextView tv = view.findViewById(R.id.textView5);
         final EditText name = view.findViewById(R.id.WOfabeditText);
-        ListView lv = view.findViewById(R.id.WOfabListView);
-        loadApplication();
+        final ListView lv = view.findViewById(R.id.WOfabListView);
+        //loadApplication();
         FloatingActionButton fabWOcreate = view.findViewById(R.id.fabcreatewo);
         lv.setAdapter(setAdapter());
+
 
 
         fabWOcreate.setOnClickListener(new View.OnClickListener() {
@@ -209,7 +211,9 @@ public class WorkoutActivity extends Fragment {
                 writeKingList(gesammtWO);
                 setGesWoUeberprüfung=true;
                 newList.clear();
+                lv.invalidateViews();
                 System.out.println("War HIER, "+ gesammtWO.getName());
+
             }
         });
 
@@ -304,12 +308,13 @@ public class WorkoutActivity extends Fragment {
                     if (testwdh)
                     {
                         Workouts wo = new Workouts(name.getText().toString().trim(), Integer.valueOf(wdh.getText().toString().trim()), null, Long.valueOf(time.getText().toString().trim()));
-                        writeCsv1(wo);
+
                         WOlist.add(wo);
+                        writeToDB(wo);
                     }else
                     {
                         Workouts wo = new Workouts(name.getText().toString().trim(), -1, null, Long.valueOf(time.getText().toString().trim()));
-                        writeCsv1(wo);
+                        writeToDB(wo);
                         WOlist.add(wo);
                     }
 
@@ -317,7 +322,7 @@ public class WorkoutActivity extends Fragment {
                 else if (testwdh)
                 {
                     Workouts wo = new Workouts(name.getText().toString().trim(), Integer.valueOf(wdh.getText().toString().trim()), null, -1);
-                    writeCsv1(wo);
+                    writeToDB(wo);
                     WOlist.add(wo);
                 }
 
